@@ -16,10 +16,10 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
-        maven { url 'https://www.jitpack.io' }
         google()
         mavenCentral()
+        maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
+        maven { url 'https://www.jitpack.io' }
     }
 }
 
