@@ -44,7 +44,7 @@ public class AUIMusicPlayerPresetDialogView extends FrameLayout {
         View.inflate(context, R.layout.aui_musicplayer_preset_dialog_view, this);
         AUIRecyclerView rvAudioPreset = findViewById(R.id.rv_audio_preset);
         List<AUIEffectVoiceInfo> presetList = buildPresetData();
-        mMusicPlayerPresetAdapter = new RecyclerView.Adapter<>() {
+        mMusicPlayerPresetAdapter = new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -145,7 +145,7 @@ public class AUIMusicPlayerControllerDialogView extends FrameLayout {
         });
 
         AUIRecyclerView rvAudioPreset = findViewById(R.id.rv_audio_reverb);
-        mMusicPlayerReverbAdapter = new RecyclerView.Adapter<>() {
+        mMusicPlayerReverbAdapter = new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

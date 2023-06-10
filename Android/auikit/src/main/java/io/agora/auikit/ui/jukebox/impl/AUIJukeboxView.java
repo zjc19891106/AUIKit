@@ -60,7 +60,7 @@ public class AUIJukeboxView extends AUIFrameLayout implements IAUIJukeboxView {
         viewPager = findViewById(R.id.viewPager);
 
         viewPager.setOffscreenPageLimit(2);
-        viewPager.setAdapter(new RecyclerView.Adapter<>() {
+        viewPager.setAdapter(new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
