@@ -1,5 +1,6 @@
 rootProject.name = "AUIKit"
 include ':auikit'
+include ':auikit-ui'
 include ':app'
 
 
