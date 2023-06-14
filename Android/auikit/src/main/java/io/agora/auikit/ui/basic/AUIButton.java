@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -24,19 +25,7 @@ public class AUIButton extends ConstraintLayout {
 
     private TextView tvText;
     private ImageView ivDrawableStart, ivDrawableEnd, ivDrawableTop, ivDrawableBottom, ivDrawableCenter;
-
-    enum BackgroundMode {
-        Solid(0x01),
-        Stroke(0x02);
-
-        private final int value;
-
-        BackgroundMode(int value) {
-            this.value = value;
-        }
-
-    }
-
+    private Drawable drawableNormal, drawableSelected, drawableDisabled, drawablePressed;
     public AUIButton(Context context) {
         this(context, null);
     }
@@ -66,27 +55,45 @@ public class AUIButton extends ConstraintLayout {
         float cornersTopRightRadius = typedArray.getDimension(R.styleable.AUIButton_aui_button_cornersTopRightRadius, dimensionNone);
         float cornersBottomLeftRadius = typedArray.getDimension(R.styleable.AUIButton_aui_button_cornersBottomLeftRadius, dimensionNone);
         float cornersBottomRightRadius = typedArray.getDimension(R.styleable.AUIButton_aui_button_cornersBottomRightRadius, dimensionNone);
-        int bgNormalColor = typedArray.getColor(R.styleable.AUIButton_aui_button_backgroundNormalColor, Color.TRANSPARENT);
-        int bgPressColor = typedArray.getColor(R.styleable.AUIButton_aui_button_backgroundPressedColor, Color.TRANSPARENT);
-        int bgDisableColor = typedArray.getColor(R.styleable.AUIButton_aui_button_backgroundDisableColor, Color.TRANSPARENT);
-        int bgMode = typedArray.getInt(R.styleable.AUIButton_aui_button_backgroundMode, BackgroundMode.Solid.value);
 
+        int borderColorNormal = typedArray.getColor(R.styleable.AUIButton_aui_button_border_color_normal, Color.TRANSPARENT);
+        GradientDrawable bgNormal = createGradientDrawable(
+                cornersRadius, cornersTopLeftRadius, cornersTopRightRadius, cornersBottomLeftRadius, cornersBottomRightRadius,
+                typedArray.getColor(R.styleable.AUIButton_aui_button_backgroundNormalColor, Color.TRANSPARENT),
+                typedArray.getColor(R.styleable.AUIButton_aui_button_border_color_normal, Color.TRANSPARENT));
+        GradientDrawable bgPressed = createGradientDrawable(
+                cornersRadius, cornersTopLeftRadius, cornersTopRightRadius, cornersBottomLeftRadius, cornersBottomRightRadius,
+                typedArray.getColor(R.styleable.AUIButton_aui_button_backgroundPressedColor, Color.TRANSPARENT),
+                typedArray.getColor(R.styleable.AUIButton_aui_button_border_color_pressed, borderColorNormal));
+        GradientDrawable bgDisabled = createGradientDrawable(
+                cornersRadius, cornersTopLeftRadius, cornersTopRightRadius, cornersBottomLeftRadius, cornersBottomRightRadius,
+                typedArray.getColor(R.styleable.AUIButton_aui_button_backgroundDisableColor, Color.TRANSPARENT),
+                typedArray.getColor(R.styleable.AUIButton_aui_button_border_color_disabled, borderColorNormal));
+        GradientDrawable bgSelected = createGradientDrawable(
+                cornersRadius, cornersTopLeftRadius, cornersTopRightRadius, cornersBottomLeftRadius, cornersBottomRightRadius,
+                typedArray.getColor(R.styleable.AUIButton_aui_button_backgroundSelectedColor, Color.TRANSPARENT),
+                typedArray.getColor(R.styleable.AUIButton_aui_button_border_color_selected, borderColorNormal));
         StateListDrawable bgDrawable = new StateListDrawable();
-        bgDrawable.addState(new int[]{android.R.attr.state_pressed}, createGradientDrawable(cornersRadius, cornersTopLeftRadius, cornersTopRightRadius, cornersBottomLeftRadius, cornersBottomRightRadius, bgPressColor, bgMode));
-        bgDrawable.addState(new int[]{-android.R.attr.state_enabled}, createGradientDrawable(cornersRadius, cornersTopLeftRadius, cornersTopRightRadius, cornersBottomLeftRadius, cornersBottomRightRadius, bgDisableColor, bgMode));
-        bgDrawable.addState(new int[]{}, createGradientDrawable(cornersRadius, cornersTopLeftRadius, cornersTopRightRadius, cornersBottomLeftRadius, cornersBottomRightRadius, bgNormalColor, bgMode));
+        bgDrawable.addState(new int[]{}, bgNormal);
+        bgDrawable.addState(new int[]{android.R.attr.state_pressed}, bgPressed);
+        bgDrawable.addState(new int[]{-android.R.attr.state_enabled}, bgDisabled);
+        bgDrawable.addState(new int[]{android.R.attr.state_selected}, bgSelected);
         setBackground(bgDrawable);
 
         // Text style
         String text = typedArray.getString(R.styleable.AUIButton_aui_button_text);
+        int typeFace = typedArray.getInt(R.styleable.AUIButton_aui_button_text_style, Typeface.NORMAL);
         float textSize = typedArray.getDimension(R.styleable.AUIButton_aui_button_textSize, 0);
         int textNormalColor = typedArray.getColor(R.styleable.AUIButton_aui_button_textNormalColor, Color.BLACK);
         int textPressedColor = typedArray.getColor(R.styleable.AUIButton_aui_button_textPressedColor, Color.BLACK);
         int textDisableColor = typedArray.getColor(R.styleable.AUIButton_aui_button_textDisableColor, Color.BLACK);
+        int textSelectedColor = typedArray.getColor(R.styleable.AUIButton_aui_button_textSelectedColor, Color.BLACK);
         tvText.setText(text);
         tvText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+        tvText.setTypeface(null, typeFace);
         tvText.setTextColor(new ColorStateList(
-                new int[][]{{android.R.attr.state_pressed}, {-android.R.attr.state_enabled}, {}}, new int[]{textPressedColor, textDisableColor, textNormalColor}
+                new int[][]{{android.R.attr.state_pressed}, {-android.R.attr.state_enabled}, {android.R.attr.state_selected}, {}},
+                new int[]{textPressedColor, textDisableColor, textSelectedColor, textNormalColor}
         ));
 
         // Drawables
@@ -130,6 +137,12 @@ public class AUIButton extends ConstraintLayout {
         int drawablePressedTint = typedArray.getInt(R.styleable.AUIButton_aui_button_drawablePressedTint, -1);
         int drawableDisableTint = typedArray.getInt(R.styleable.AUIButton_aui_button_drawableDisableTint, -1);
         ColorStateList drawableTintList = new ColorStateList(new int[][]{{android.R.attr.state_pressed}, {-android.R.attr.state_enabled}, {}}, new int[]{drawablePressedTint, drawableDisableTint, drawableTint});
+
+        drawableNormal = typedArray.getDrawable(R.styleable.AUIButton_aui_button_drawableStart);
+        drawableSelected = typedArray.getDrawable(R.styleable.AUIButton_aui_button_drawable_selected);
+        drawableDisabled = typedArray.getDrawable(R.styleable.AUIButton_aui_button_drawable_disabled);
+        drawablePressed = typedArray.getDrawable(R.styleable.AUIButton_aui_button_drawable_pressed);
+
         //      DrawableStart
         setupDrawable(drawablePadding,
                 drawablePaddingStart,
@@ -203,6 +216,9 @@ public class AUIButton extends ConstraintLayout {
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         ivDrawableStart.setEnabled(enabled);
+        if (drawableDisabled != null) {
+            ivDrawableStart.setImageDrawable(enabled ? drawableNormal : drawableDisabled);
+        }
         ivDrawableTop.setEnabled(enabled);
         ivDrawableEnd.setEnabled(enabled);
         ivDrawableBottom.setEnabled(enabled);
@@ -210,6 +226,32 @@ public class AUIButton extends ConstraintLayout {
         tvText.setEnabled(enabled);
         setClickable(enabled);
         setFocusable(enabled);
+    }
+    @Override
+    public void setPressed(boolean pressed) {
+        super.setPressed(pressed);
+        ivDrawableStart.setPressed(pressed);
+        if (drawablePressed != null) {
+            ivDrawableStart.setImageDrawable(pressed ? drawablePressed : drawableNormal);
+        }
+        ivDrawableTop.setPressed(pressed);
+        ivDrawableEnd.setPressed(pressed);
+        ivDrawableBottom.setPressed(pressed);
+        ivDrawableCenter.setPressed(pressed);
+        tvText.setPressed(pressed);
+    }
+    @Override
+    public void setSelected(boolean selected) {
+        super.setSelected(selected);
+        ivDrawableStart.setSelected(selected);
+        if (drawableSelected != null) {
+            ivDrawableStart.setImageDrawable(selected ? drawableSelected : drawableNormal);
+        }
+        ivDrawableTop.setSelected(selected);
+        ivDrawableEnd.setSelected(selected);
+        ivDrawableBottom.setSelected(selected);
+        ivDrawableCenter.setSelected(selected);
+        tvText.setSelected(selected);
     }
 
     private void setupDrawable(int drawablePadding,
@@ -280,8 +322,8 @@ public class AUIButton extends ConstraintLayout {
             float cornersTopRightRadius,
             float cornersBottomLeftRadius,
             float cornersBottomRightRadius,
-            int color,
-            int bgMode
+            int backgroundColor,
+            int borderColor
     ) {
         GradientDrawable drawable = new GradientDrawable();
         if (cornersRadius > 0) {
@@ -294,12 +336,10 @@ public class AUIButton extends ConstraintLayout {
                     cornersBottomRightRadius, cornersBottomRightRadius
             });
         }
-
-        if (bgMode == BackgroundMode.Stroke.value) {
-            drawable.setStroke(2, color);
-        } else {
-            drawable.setColor(color);
+        if (borderColor != Color.TRANSPARENT) {
+            drawable.setStroke(2, borderColor);
         }
+        drawable.setColor(backgroundColor);
         return drawable;
     }
 
@@ -310,6 +350,4 @@ public class AUIButton extends ConstraintLayout {
     public void setCenterDrawable(Drawable drawable) {
         ivDrawableCenter.setImageDrawable(drawable);
     }
-
-
 }

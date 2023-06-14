@@ -21,6 +21,12 @@
         <attr name="aui_button_backgroundNormalColor" format="color" />
         <attr name="aui_button_backgroundPressedColor" format="color" />
         <attr name="aui_button_backgroundDisableColor" format="color" />
+        <attr name="aui_button_backgroundSelectedColor" format="color" />
+        <!-- 线框颜色 -->
+        <attr name="aui_button_border_color_normal" format="color" />
+        <attr name="aui_button_border_color_pressed" format="color" />
+        <attr name="aui_button_border_color_disabled" format="color" />
+        <attr name="aui_button_border_color_selected" format="color" />
         <attr name="aui_button_backgroundMode">
             <enum name="solid" value="0x01" /> <!-- 实心 -->
             <enum name="stroke" value="0x02" /> <!-- 线条 -->
@@ -29,9 +35,16 @@
         <!-- 文字颜色大小 -->
         <attr name="aui_button_text" format="string" />
         <attr name="aui_button_textSize" format="dimension" />
+        <attr name="aui_button_text_style">
+            <enum name="normal" value="0x0" />
+            <enum name="bold" value="0x01" />
+            <enum name="italic" value="0x02" />
+            <enum name="bold_italic" value="0x03" />
+        </attr>
         <attr name="aui_button_textNormalColor" format="color" />
         <attr name="aui_button_textPressedColor" format="color" />
         <attr name="aui_button_textDisableColor" format="color" />
+        <attr name="aui_button_textSelectedColor" format="color" />
 
         <!-- 图标：相比原生android:drawableXxx更加灵活 -->
         <!--       java: setDrawables(drawableStart, drawableTop, drawableEnd, drawableBottom) -->
@@ -40,6 +53,11 @@
         <attr name="aui_button_drawableTop" format="reference" />
         <attr name="aui_button_drawableBottom" format="reference" />
         <attr name="aui_button_drawableCenter" format="reference" />
+        <!--       各种状态时显示的图片 -->
+        <attr name="aui_button_drawable_selected" format="reference" />
+        <attr name="aui_button_drawable_disabled" format="reference" />
+        <attr name="aui_button_drawable_pressed" format="reference" />
+
         <!--       java: setDrawableToEdge(boolean) -->
         <attr name="aui_button_drawableToEdge" format="boolean" />
         <!--       java: setDrawableLayoutParameters(MarginLayoutParameter) -->
@@ -92,9 +110,9 @@
         <item name="aui_button_backgroundNormalColor">@color/aui_primary</item>
         <item name="aui_button_backgroundPressedColor">@color/aui_primary_overlay</item>
         <item name="aui_button_backgroundDisableColor">@color/aui_primary_light</item>
-        <item name="aui_button_backgroundMode">solid</item>
 
         <item name="aui_button_textSize">16sp</item>
+        <item name="aui_button_text_style">normal</item>
         <item name="aui_button_textNormalColor">@color/aui_white</item>
         <item name="aui_button_textPressedColor">@color/aui_white</item>
         <item name="aui_button_textDisableColor">@color/aui_white</item>
@@ -127,7 +145,11 @@
     </style>
 
     <style name="AUIButton.Stroke">
-        <item name="aui_button_backgroundMode">stroke</item>
+        <item name="aui_button_border_color_normal">@color/aui_primary_overlay</item>
+        <item name="aui_button_backgroundNormalColor">@null</item>
+        <item name="aui_button_backgroundPressedColor">@null</item>
+        <item name="aui_button_backgroundDisableColor">@null</item>
+
         <item name="aui_button_textNormalColor">@color/aui_primary</item>
         <item name="aui_button_textPressedColor">@color/aui_primary_overlay</item>
         <item name="aui_button_textDisableColor">@color/aui_primary_light</item>
@@ -148,7 +170,11 @@
     </style>
 
     <style name="AUIButton.Mini.Stroke">
-        <item name="aui_button_backgroundMode">stroke</item>
+        <item name="aui_button_border_color_normal">@color/aui_primary_overlay</item>
+        <item name="aui_button_backgroundNormalColor">@null</item>
+        <item name="aui_button_backgroundPressedColor">@null</item>
+        <item name="aui_button_backgroundDisableColor">@null</item>
+
         <item name="aui_button_textNormalColor">@color/aui_primary</item>
         <item name="aui_button_textPressedColor">@color/aui_primary_overlay</item>
         <item name="aui_button_textDisableColor">@color/aui_primary_light</item>
@@ -172,12 +198,14 @@
     </style>
 
     <style name="AUIButton.Circle.Stroke">
-        <item name="aui_button_backgroundMode">stroke</item>
+        <item name="aui_button_border_color_normal">@color/aui_primary_overlay</item>
+        <item name="aui_button_backgroundNormalColor">@null</item>
+        <item name="aui_button_backgroundPressedColor">@null</item>
+        <item name="aui_button_backgroundDisableColor">@color/aui_primary</item>
+
         <item name="aui_button_textNormalColor">@color/aui_primary</item>
         <item name="aui_button_textPressedColor">@color/aui_primary_overlay</item>
         <item name="aui_button_textDisableColor">@color/aui_primary_light</item>
-
-        <item name="aui_button_backgroundDisableColor">@color/aui_primary</item>
 
         <item name="aui_button_drawableTint">@color/aui_primary</item>
         <item name="aui_button_drawablePressedTint">@color/aui_primary_overlay</item>

@@ -168,7 +168,7 @@
                     style="?attr/aui_button_appearance_stroke"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    app:aui_button_backgroundMode="stroke"
+                    app:aui_button_border_color_normal="@color/aui_danger"
                     app:aui_button_drawableStart="@mipmap/ic_member"
                     app:aui_button_text="Primary" />
 
@@ -177,7 +177,7 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     app:aui_button_backgroundNormalColor="@android:color/holo_red_light"
-                    app:aui_button_backgroundPressedColor="@android:color/holo_red_dark"
+                    app:aui_button_backgroundPressedColor="@android:color/black"
                     app:aui_button_drawableStart="@mipmap/ic_member"
                     app:aui_button_drawableTint="@android:color/holo_red_dark"
                     app:aui_button_text="Primary" />
