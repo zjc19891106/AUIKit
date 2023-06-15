@@ -102,7 +102,7 @@ extension AUIRtmMsgProxy: AgoraRtmClientDelegate {
         //TODO: 暂时实现这个
         origRtmDelegate?.rtmKit?(rtmKit, onTokenPrivilegeWillExpire: channel)
         
-        errorDelegates.objectEnumerator().forEach { element in
+        for element in errorDelegates.allObjects {
             (element as? AUIRtmErrorProxyDelegate)?.onTokenPrivilegeWillExpire?(channelName: channel)
         }
     }
@@ -114,7 +114,7 @@ extension AUIRtmMsgProxy: AgoraRtmClientDelegate {
         aui_info("connectionStateChanged: \(state.rawValue)", tag: "AUIRtmMsgProxy")
         origRtmDelegate?.rtmKit?(kit, channel: channelName, connectionStateChanged: state, result: reason)
         
-        errorDelegates.objectEnumerator().forEach { element in
+        for element in errorDelegates.allObjects {
             (element as? AUIRtmErrorProxyDelegate)?.onConnectionStateChanged?(channelName: channelName,
                                                                               connectionStateChanged: state,
                                                                               result: reason)
@@ -142,7 +142,7 @@ extension AUIRtmMsgProxy: AgoraRtmClientDelegate {
             }
             let delegateKey = "\(event.target)__\(item.key)"
             if let value = self.msgDelegates[delegateKey] {
-                value.objectEnumerator().forEach { element in
+                for element in value.allObjects {
                     if let delegate = element as? AUIRtmMsgProxyDelegate {
                         delegate.onMsgDidChanged(channelName: event.target, key: item.key, value: itemValue)
                     }
@@ -154,9 +154,10 @@ extension AUIRtmMsgProxy: AgoraRtmClientDelegate {
             return
         }
         
-        errorDelegates.objectEnumerator().forEach { element in
+        for element in errorDelegates.allObjects {
             (element as? AUIRtmErrorProxyDelegate)?.onMsgRecvEmpty?(channelName: event.target)
         }
+        
         aui_info("storage event[\(event.target)] ========", tag: "AUIRtmMsgProxy")
     }
     
@@ -176,11 +177,11 @@ extension AUIRtmMsgProxy: AgoraRtmClientDelegate {
                 aui_warn("join user fail, empty: userId: \(userId) \(map)", tag: "AUIRtmMsgProxy")
                 return
             }
-            userDelegates.objectEnumerator().forEach{ element in
+            for element in userDelegates.allObjects {
                 (element as? AUIRtmUserProxyDelegate)?.onUserDidJoined(channelName: event.channelName, userId: userId, userInfo: map)
             }
         } else if event.type == .remoteLeaveChannel || event.type == .remoteConnectionTimeout {
-            userDelegates.objectEnumerator().forEach { element in
+            for element in userDelegates.allObjects {
                 (element as? AUIRtmUserProxyDelegate)?.onUserDidLeaved(channelName: event.channelName, userId: userId, userInfo: map)
             }
         } else if event.type == .remoteStateChanged {
@@ -188,12 +189,12 @@ extension AUIRtmMsgProxy: AgoraRtmClientDelegate {
                 aui_warn("update user fail, empty: userId: \(userId) \(map)", tag: "AUIRtmMsgProxy")
                 return
             }
-            userDelegates.objectEnumerator().forEach { element in
+            for element in userDelegates.allObjects {
                 (element as? AUIRtmUserProxyDelegate)?.onUserDidUpdated(channelName: event.channelName, userId: userId, userInfo: map)
             }
         } else if event.type == .snapshot {
             let userList = event.snapshotList()
-            userDelegates.objectEnumerator().forEach { element in
+            for element in userDelegates.allObjects {
                 (element as? AUIRtmUserProxyDelegate)?.onUserSnapshotRecv(channelName: event.channelName, userId: userId, userList: userList)
             }
         }
